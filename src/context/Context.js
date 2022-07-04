@@ -22,6 +22,10 @@ export const Context = ({ children }) => {
     dispatch({ type: "REMOVE_FROM_CART", payload: id });
   };
 
+  const changeCartQty = (id, qty) => {
+    dispatch({ type: "CHANGE_CART_QTY", payload: { id: id, qty: qty } });
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -29,6 +33,7 @@ export const Context = ({ children }) => {
         cart: state.cart,
         addToCart,
         removeFromCart,
+        changeCartQty,
       }}
     >
       {children}

@@ -35,6 +35,16 @@ export const cartReducer = (state, action) => {
         ),
       };
 
+    case "CHANGE_CART_QTY":
+      return {
+        ...state,
+        cart: state.cart.filter((product) =>
+          product.id === action.payload.id
+            ? (product.qty = action.payload.qty)
+            : product.qty
+        ),
+      };
+
     //todo Ovo se kasnije moze iskoristiti za npr. add to wishlist i slicno
     // case "MARK_AS_WATCHED":
     //   return {
