@@ -5,7 +5,7 @@ const fakerProducts = [...Array(20)].map(() => ({
   name: faker.commerce.productName(),
   price: faker.commerce.price(),
   image: faker.image.technics(),
-  inStock: faker.helpers.arrayElements([0, 3, 5, 6, 7]),
+  inStock: faker.helpers.arrayElement([0, 3, 5, 6, 7]),
   fastDelivery: faker.datatype.boolean(),
   ratings: faker.helpers.arrayElement([1, 2, 3, 4, 5]),
 }));
@@ -17,6 +17,10 @@ export const initialState = {
   cart: localStorage.getItem("cart")
     ? JSON.parse(localStorage.getItem("cart"))
     : [],
+  byStock: false,
+  byFastDelivery: false,
+  byRating: 0,
+  searchQuery: "",
 };
 
 export const cartReducer = (state, action) => {
@@ -45,29 +49,53 @@ export const cartReducer = (state, action) => {
         ),
       };
 
-    //todo Ovo se kasnije moze iskoristiti za npr. add to wishlist i slicno
-    // case "MARK_AS_WATCHED":
-    //   return {
-    //     ...state,
-    //     watched: [action.payload, ...state.watched],
-    //     watchlist: state.watchlist.filter(
-    //       (movie) => movie.id !== action.payload.id //automatsko brisanje po njegovom id-u
-    //     ),
-    //   };
-    // case "REMOVE_FROM_WATCHED_LIST":
-    //   return {
-    //     ...state,
-    //     watched: state.watched.filter((movie) => movie.id !== action.payload),
-    //   };
-    // case "MOVE_TO_WATCHLIST":
-    //   return {
-    //     ...state,
-    //     watched: state.watched.filter(
-    //       (movie) => movie.id !== action.payload.id
-    //     ),
-    //     watchlist: [action.payload, ...state.watchlist],
-    //   };
     default:
       return state;
+  }
+};
+
+export const productReducer = (state, action) => {
+  switch (action.type) {
+    case "SORT_BY_PRICE":
+      return { ...state, sort: action.payload };
+
+    case "FILTER_BY_STOCK":
+      return { ...state, byStock: !state.byStock };
+
+    case "FILTER_BY_DELIVERY":
+      return { ...state, byFastDelivery: !state.byFastDelivery };
+
+    case "FILTER_BY_RATING":
+      return { ...state, byRating: action.payload };
+
+    case "FILTER_BY_SEARCH":
+      return { ...state, searchText: action.payload };
+
+    case "CLEAR_FILTERS":
+      return {
+        products: localStorage.getItem("products"),
+        byStock: false,
+        byFastDelivery: false,
+        byRating: 0,
+        searchQuery: "",
+      };
+
+    // case "SEARCH_TEXT":
+    //   return Object.assign({}, state, {
+    //     searchQuery: action.text,
+    //   });
+
+    // case "SORT_BY_PRICE":
+    //   return {
+    //     ...state,
+    //     sort: state.products.sort((a, b) => {
+    //       if (action.payload === "lowToHigh") return a.price - b.price;
+    //       else if (action.payload === "highToLow") return b.price - a.price;
+    //       else return state.products; // ovo je sad ako zelimo da nam sortira prema random cijenama
+    //     }),
+    //   };
+
+    default:
+      break;
   }
 };

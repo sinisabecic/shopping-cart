@@ -9,6 +9,13 @@ const Cart = () => {
 
   const [total, setTotal] = useState(0);
 
+  useEffect(() => {
+    //Generisanje cijena spram kolicini artikla tj. kolicini proizvoda u korpi
+    setTotal(
+      cart.reduce((acc, curr) => acc + Number(curr.price) * curr.qty, 0)
+    );
+  }, [cart]);
+
   return (
     <div className="home">
       <div className="productContainer">
@@ -32,6 +39,7 @@ const Cart = () => {
                     value={product.qty}
                     onChange={(e) => changeCartQty(product.id, e.target.value)}
                   >
+                    {/* Onoliko koliko je na lageru dozvoli i kolicinu za porucivanje */}
                     {[...Array(product.inStock).keys()].map((x) => (
                       <option key={x + 1}>{x + 1}</option>
                     ))}
@@ -52,7 +60,7 @@ const Cart = () => {
         </ListGroup>
       </div>
       <div className="filters summary">
-        <span className="title">Subtotal ({cart.length}) items</span>
+        <span className="title">In cart: ({cart.length}) items</span>
         <span style={{ fontWeight: 700, fontSize: 20 }}>
           Total: {total} &euro;
         </span>

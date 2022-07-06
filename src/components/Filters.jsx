@@ -4,11 +4,22 @@ import { CartContext } from "../context/Context";
 import Rating from "./Rating";
 
 const Filters = () => {
-  const [rate, setRate] = useState(0);
-
   //
-  const { productDispatch, byStock, byFastDelivery, sort, byRating } =
-    useContext(CartContext);
+  const {
+    sort,
+    byStock,
+    byFastDelivery,
+    byRating,
+    filterByStock,
+    sortByPriceAsc,
+    sortByPriceDesc,
+    filterByFastDelivery,
+    filterByRating,
+    clearFilters,
+    // productDispatch, //? za dr. nacin
+  } = useContext(CartContext);
+
+  console.log(sort, byStock, byFastDelivery, byRating);
 
   return (
     <div className="filters">
@@ -20,6 +31,15 @@ const Filters = () => {
           name="group1"
           type="radio"
           id={`inline-1`}
+          onChange={sortByPriceAsc}
+          //? drugi nacin
+          // onChange={() =>
+          //   productDispatch({
+          //     type: "SORT_BY_PRICE",
+          //     payload: "lowToHigh",
+          //   })
+          // }
+          checked={sort === "lowToHigh" ? true : false}
         />
       </span>
       <span>
@@ -29,6 +49,15 @@ const Filters = () => {
           name="group1"
           type="radio"
           id={`inline-2`}
+          onChange={sortByPriceDesc}
+          //? drugi nacin
+          // onChange={() =>
+          //   productDispatch({
+          //     type: "SORT_BY_PRICE",
+          //     payload: "highToLow",
+          //   })
+          // }
+          checked={sort === "highToLow" ? true : false}
         />
       </span>
       <span>
@@ -38,6 +67,8 @@ const Filters = () => {
           name="group1"
           type="checkbox"
           id={`inline-3`}
+          onChange={filterByStock}
+          checked={byStock}
         />
       </span>
       <span>
@@ -47,17 +78,19 @@ const Filters = () => {
           name="group1"
           type="checkbox"
           id={`inline-4`}
+          onChange={filterByFastDelivery}
+          checked={byFastDelivery}
         />
       </span>
       <span>
         <label style={{ paddingRight: 10 }}>Rating: </label>
         <Rating
-          rating={rate}
-          onClick={(i) => setRate(i + 1)}
+          rating={byRating}
+          onClick={(i) => filterByRating(i)}
           style={{ cursor: "pointer" }}
         />
       </span>
-      <Button variant="light" onClick={() => setRate(0)}>
+      <Button variant="light" onClick={clearFilters}>
         Clear Filters
       </Button>
     </div>
